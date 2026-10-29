@@ -328,7 +328,7 @@ def main(argv=None):
         + (f" (first 8 rows: {lab_on[8]:.1%})" if 8 in lab_on else "") + "; for the rest the modelled rows precede onset.",
         f"Missingness: selected features are missing in {sel.missingness.min():.1%}-{sel.missingness.max():.1%} of rows "
         f"(median {sel.missingness.median():.1%}); training-fold median imputation repeats one value across a patient's rows, "
-        f"which inflates ICC (imputed vs observed-only ICC in icc_per_feature.csv); the simulation has no missingness.",
+        f"which changes ICC, here lowering it (imputed vs observed-only ICC in icc_per_feature.csv); the simulation has no missingness.",
         f"Correlated features: mean |r| between selected features is {mean_abs_r:.2f}; the simulation uses independent features.",
         f"Heterogeneous ICC: per-feature ICC ranges " + "; ".join(
             f"k={k}: {icc.loc[icc.k == k, 'icc_imputed'].min():.2f}-{icc.loc[icc.k == k, 'icc_imputed'].max():.2f}" for k in cohorts)
