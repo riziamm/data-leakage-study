@@ -5,3 +5,7 @@ runs/*/cells/
 runs/*/replicates.csv.gz
 early/
 .venv/
+data/
+data/
+data/
+early/

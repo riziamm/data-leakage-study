@@ -1,0 +1,19 @@
+nohup: ignoring input
+2026-10-29 10:55:49  SKIP  unpack (already done)
+2026-10-29 10:55:49  SKIP  env (already done)
+python 3.11.18
+2026-10-29 10:55:49  cores=250 availRAM=528GB workers=250 run_id=v1 chunks=10 rf=1
+2026-10-29 10:55:49  SKIP  tests_static (already done)
+2026-10-29 10:55:49  SKIP  grid_lrknn (already done)
+2026-10-29 10:55:49  SKIP  verify_lrknn (already done)
+2026-10-29 10:55:49  SKIP  grid_rf (already done)
+2026-10-29 10:55:49  SKIP  verify_rf (already done)
+2026-10-29 10:55:49  SKIP  merge_rf (already done)
+2026-10-29 10:55:49  SKIP  summarise (already done)
+2026-10-29 10:56:16  DONE  acceptance
+2026-10-29 10:56:16  START figures (attempt 1/5): figs
+2026-10-29 10:56:18  DONE  figures
+2026-10-29 10:56:18  SKIP  calculator (already done)
+2026-10-29 10:56:18  START pr_body (attempt 1/5): bash -c { echo '## Tests'; cat 'runs/v1/test_output.txt'; echo; echo '## Calculator'; cat 'runs/v1/calculator_report.txt'; echo; echo '## Calibration'; cat 'runs/v1/calibration.csv'; echo; echo '## Code'; git status --short | wc -l | sed 's/^/uncommitted files: /'; } > 'runs/v1/PR_BODY.md'
+2026-10-29 10:56:18  DONE  pr_body
+2026-10-29 10:56:18  ALL DONE. Outputs: /home/u5499379/projects/mie27-unit-leakage/runs/v1  (results.csv, fig1_nomogram*.pdf, fig2_null*.pdf, calculator.py, PR_BODY.md)

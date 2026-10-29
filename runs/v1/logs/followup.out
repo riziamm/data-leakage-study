@@ -1,0 +1,199 @@
+== 1. run ids and code versions ==
+  runs/v1/cells/lr             files=  960 git_hash=['b80d4a349551b162a35233baaac67763aea8092c']
+  runs/v1/cells/knn            files=  960 git_hash=['b80d4a349551b162a35233baaac67763aea8092c']
+  runs/v1-rf/cells/rf          files=  184 git_hash=['b80d4a349551b162a35233baaac67763aea8092c']
+  early subset: early/v1  (copy of runs/v1 LR+kNN cells; run_id column = v1)
+  HEAD now: b80d4a349551b162a35233baaac67763aea8092c (fix multi-worker entry point)
+== 2. test-3 comparator (80% training), LR + kNN now; RF after RF finishes ==
+model   scenario   p  auc_indep80_mean  auc_indep80_mcse  regen_checked  regen_max_abs_diff  regen_ok
+  knn   S1_r1_d0  20          0.654089          0.001388            200                 0.0      True
+  knn   S1_r1_d0 180          0.564058          0.001201            200                 0.0      True
+  knn S1_r1_d0.2  20          0.657754          0.001570            200                 0.0      True
+  knn S1_r1_d0.2 180          0.565112          0.001189            200                 0.0      True
+  knn   S1_r2_d0  20          0.663759          0.001246            200                 0.0      True
+  knn   S1_r2_d0 180          0.568316          0.001010            200                 0.0      True
+  knn S1_r2_d0.2  20          0.662508          0.001215            200                 0.0      True
+  knn S1_r2_d0.2 180          0.571341          0.001052            200                 0.0      True
+  knn      S2_k4  20          0.663841          0.001134            200                 0.0      True
+  knn      S2_k4 180          0.569674          0.001060            200                 0.0      True
+  knn      S2_k8  20          0.672781          0.001037            200                 0.0      True
+  knn      S2_k8 180          0.574562          0.000950            200                 0.0      True
+  knn         S3  20          0.668173          0.001066            200                 0.0      True
+  knn         S3 180          0.570922          0.001111            200                 0.0      True
+  knn    control  20          0.649255          0.001809            200                 0.0      True
+  knn    control 180          0.559677          0.001338            200                 0.0      True
+   lr   S1_r1_d0  20          0.773260          0.000900            200                 0.0      True
+   lr   S1_r1_d0 180          0.648163          0.001466            200                 0.0      True
+   lr S1_r1_d0.2  20          0.773810          0.001002            200                 0.0      True
+   lr S1_r1_d0.2 180          0.644166          0.001491            200                 0.0      True
+   lr   S1_r2_d0  20          0.785555          0.000825            200                 0.0      True
+   lr   S1_r2_d0 180          0.697832          0.001035            200                 0.0      True
+   lr S1_r2_d0.2  20          0.786458          0.000784            200                 0.0      True
+   lr S1_r2_d0.2 180          0.700231          0.001077            200                 0.0      True
+   lr      S2_k4  20          0.785488          0.000771            200                 0.0      True
+   lr      S2_k4 180          0.700042          0.001190            200                 0.0      True
+   lr      S2_k8  20          0.794883          0.000766            200                 0.0      True
+   lr      S2_k8 180          0.745759          0.000893            200                 0.0      True
+   lr         S3  20          0.790474          0.000749            200                 0.0      True
+   lr         S3 180          0.715459          0.001065            200                 0.0      True
+   lr    control  20          0.751872          0.001482            200                 0.0      True
+   lr    control 180          0.624645          0.001596            200                 0.0      True
+wrote runs/v1/test3_comparator80.csv
+-- tests 0-3 on the LR+kNN subset with the new comparator --
+============================= test session starts ==============================
+platform linux -- Python 3.11.18, pytest-9.2.0, pluggy-1.7.0 -- /home/u5499379/projects/mie27-unit-leakage/.venv/bin/python
+rootdir: /home/u5499379/projects/mie27-unit-leakage
+configfile: pyproject.toml
+collecting ... collected 63 items / 55 deselected / 8 selected
+
+tests/test_acceptance.py::test_0_full_replication PASSED                 [ 12%]
+tests/test_acceptance.py::test_1_icc0_no_optimism[lr] PASSED             [ 25%]
+tests/test_acceptance.py::test_1_icc0_no_optimism[knn] PASSED            [ 37%]
+tests/test_acceptance.py::test_1_icc0_no_optimism[rf] SKIPPED (no rf...) [ 50%]
+tests/test_acceptance.py::test_2_control_no_optimism[lr] PASSED          [ 62%]
+tests/test_acceptance.py::test_2_control_no_optimism[knn] PASSED         [ 75%]
+tests/test_acceptance.py::test_2_control_no_optimism[rf] SKIPPED (no...) [ 87%]
+tests/test_acceptance.py::test_3_splits_match_independent_auc PASSED     [100%]
+
+================= 6 passed, 2 skipped, 55 deselected in 3.50s ==================
+test-3 gaps, all rows (limit |gap_80| <= 0.02):
+run_id model   scenario   p     split  auc_mean  auc_indep80_mean  gap_80  gap_100
+    v1    lr   S1_r1_d0 180    b_unit    0.6435            0.6482 -0.0046  -0.0132
+    v1    lr   S1_r1_d0 180     a_row    0.6437            0.6482 -0.0045  -0.0130
+    v1    lr   S1_r1_d0 180 c_patient    0.6441            0.6482 -0.0041  -0.0126
+    v1    lr S1_r2_d0.2 180 c_patient    0.6966            0.7002 -0.0036  -0.0204
+    v1    lr S1_r2_d0.2 180     a_row    0.6970            0.7002 -0.0032  -0.0200
+    v1   knn   S1_r1_d0 180     a_row    0.5611            0.5641 -0.0030  -0.0050
+    v1   knn   S1_r1_d0 180    b_unit    0.5612            0.5641 -0.0028  -0.0048
+    v1    lr S1_r2_d0.2 180    b_unit    0.6978            0.7002 -0.0024  -0.0192
+    v1   knn   S1_r1_d0 180 c_patient    0.5618            0.5641 -0.0023  -0.0043
+    v1    lr         S3 180 c_patient    0.7135            0.7155 -0.0020  -0.0168
+    v1    lr      S2_k8  20 c_patient    0.7930            0.7949 -0.0019  -0.0033
+    v1   knn   S1_r2_d0 180 c_patient    0.5664            0.5683 -0.0019  -0.0033
+    v1    lr      S2_k8  20     a_row    0.7930            0.7949 -0.0019  -0.0033
+    v1    lr      S2_k8  20    b_unit    0.7930            0.7949 -0.0019  -0.0033
+    v1    lr    control 180 c_patient    0.6228            0.6246 -0.0019  -0.0084
+    v1    lr      S2_k8 180 c_patient    0.7442            0.7458 -0.0016  -0.0121
+    v1    lr      S2_k4 180     a_row    0.6985            0.7000 -0.0016  -0.0202
+    v1    lr      S2_k4 180    b_unit    0.6985            0.7000 -0.0016  -0.0202
+    v1    lr         S3 180     a_row    0.7139            0.7155 -0.0015  -0.0163
+    v1    lr         S3 180    b_unit    0.7139            0.7155 -0.0015  -0.0163
+    v1    lr      S2_k4 180 c_patient    0.6985            0.7000 -0.0015  -0.0202
+    v1   knn   S1_r2_d0 180     a_row    0.5670            0.5683 -0.0013  -0.0027
+    v1   knn   S1_r2_d0 180    b_unit    0.5672            0.5683 -0.0011  -0.0025
+    v1    lr S1_r2_d0.2  20    b_unit    0.7854            0.7865 -0.0010  -0.0037
+    v1    lr      S2_k8 180     a_row    0.7448            0.7458 -0.0010  -0.0115
+    v1    lr      S2_k8 180    b_unit    0.7448            0.7458 -0.0010  -0.0115
+    v1   knn S1_r2_d0.2 180 c_patient    0.5704            0.5713 -0.0009  -0.0021
+    v1    lr S1_r2_d0.2  20     a_row    0.7856            0.7865 -0.0008  -0.0035
+    v1    lr S1_r2_d0.2  20 c_patient    0.7857            0.7865 -0.0008  -0.0034
+    v1   knn    control 180 c_patient    0.5589            0.5597 -0.0007  -0.0031
+    v1   knn    control 180    b_unit    0.5591            0.5597 -0.0006  -0.0029
+    v1   knn    control 180     a_row    0.5591            0.5597 -0.0006  -0.0029
+    v1   knn S1_r2_d0.2 180     a_row    0.5708            0.5713 -0.0005  -0.0017
+    v1   knn         S3 180 c_patient    0.5705            0.5709 -0.0004  -0.0017
+    v1    lr   S1_r2_d0 180     a_row    0.6974            0.6978 -0.0004  -0.0179
+    v1    lr   S1_r2_d0 180 c_patient    0.6974            0.6978 -0.0004  -0.0178
+    v1   knn S1_r2_d0.2 180    b_unit    0.5710            0.5713 -0.0003  -0.0015
+    v1   knn      S2_k8  20 c_patient    0.6725            0.6728 -0.0002  -0.0025
+    v1   knn      S2_k8  20    b_unit    0.6726            0.6728 -0.0002  -0.0024
+    v1   knn      S2_k8  20     a_row    0.6726            0.6728 -0.0002  -0.0024
+    v1   knn   S1_r1_d0  20    b_unit    0.6540            0.6541 -0.0001  -0.0033
+    v1   knn   S1_r1_d0  20     a_row    0.6540            0.6541 -0.0000  -0.0032
+    v1    lr   S1_r2_d0 180    b_unit    0.6979            0.6978  0.0001  -0.0174
+    v1   knn S1_r2_d0.2  20     a_row    0.6626            0.6625  0.0001  -0.0021
+    v1   knn      S2_k8 180 c_patient    0.5748            0.5746  0.0002  -0.0014
+    v1    lr         S3  20    b_unit    0.7907            0.7905  0.0002  -0.0016
+    v1    lr         S3  20     a_row    0.7907            0.7905  0.0002  -0.0016
+    v1   knn      S2_k8 180     a_row    0.5748            0.5746  0.0002  -0.0014
+    v1   knn      S2_k8 180    b_unit    0.5748            0.5746  0.0002  -0.0014
+    v1   knn         S3 180    b_unit    0.5712            0.5709  0.0003  -0.0009
+    v1   knn         S3 180     a_row    0.5712            0.5709  0.0003  -0.0009
+    v1    lr S1_r1_d0.2  20 c_patient    0.7741            0.7738  0.0003  -0.0045
+    v1    lr         S3  20 c_patient    0.7908            0.7905  0.0003  -0.0015
+    v1    lr    control 180     a_row    0.6251            0.6246  0.0004  -0.0061
+    v1    lr    control 180    b_unit    0.6251            0.6246  0.0004  -0.0061
+    v1   knn S1_r2_d0.2  20    b_unit    0.6631            0.6625  0.0006  -0.0016
+    v1   knn S1_r1_d0.2  20    b_unit    0.6585            0.6578  0.0007  -0.0024
+    v1    lr S1_r1_d0.2  20     a_row    0.7746            0.7738  0.0008  -0.0040
+    v1    lr S1_r1_d0.2  20    b_unit    0.7746            0.7738  0.0008  -0.0040
+    v1    lr   S1_r1_d0  20    b_unit    0.7741            0.7733  0.0008  -0.0039
+    v1   knn S1_r1_d0.2  20     a_row    0.6586            0.6578  0.0009  -0.0023
+    v1   knn S1_r1_d0.2 180 c_patient    0.5660            0.5651  0.0009   0.0005
+    v1   knn S1_r2_d0.2  20 c_patient    0.6634            0.6625  0.0009  -0.0013
+    v1   knn      S2_k4  20    b_unit    0.6648            0.6638  0.0009  -0.0014
+    v1   knn      S2_k4  20     a_row    0.6648            0.6638  0.0009  -0.0014
+    v1   knn         S3  20     a_row    0.6692            0.6682  0.0010  -0.0016
+    v1   knn         S3  20    b_unit    0.6692            0.6682  0.0010  -0.0016
+    v1   knn   S1_r1_d0  20 c_patient    0.6551            0.6541  0.0010  -0.0021
+    v1   knn         S3  20 c_patient    0.6693            0.6682  0.0011  -0.0015
+    v1   knn      S2_k4  20 c_patient    0.6650            0.6638  0.0011  -0.0012
+    v1   knn S1_r1_d0.2  20 c_patient    0.6589            0.6578  0.0012  -0.0020
+    v1    lr   S1_r1_d0  20     a_row    0.7744            0.7733  0.0012  -0.0036
+    v1    lr   S1_r1_d0  20 c_patient    0.7745            0.7733  0.0012  -0.0036
+    v1   knn S1_r1_d0.2 180    b_unit    0.5664            0.5651  0.0013   0.0009
+    v1   knn   S1_r2_d0  20 c_patient    0.6653            0.6638  0.0015  -0.0007
+    v1   knn S1_r1_d0.2 180     a_row    0.5666            0.5651  0.0015   0.0012
+    v1   knn   S1_r2_d0  20     a_row    0.6654            0.6638  0.0016  -0.0006
+    v1    lr      S2_k4  20 c_patient    0.7871            0.7855  0.0017  -0.0010
+    v1    lr      S2_k4  20    b_unit    0.7872            0.7855  0.0017  -0.0009
+    v1    lr      S2_k4  20     a_row    0.7872            0.7855  0.0017  -0.0009
+    v1   knn   S1_r2_d0  20    b_unit    0.6657            0.6638  0.0019  -0.0003
+    v1    lr   S1_r2_d0  20 c_patient    0.7878            0.7856  0.0022  -0.0004
+    v1    lr   S1_r2_d0  20     a_row    0.7878            0.7856  0.0022  -0.0003
+    v1   knn      S2_k4 180    b_unit    0.5720            0.5697  0.0023   0.0006
+    v1   knn      S2_k4 180     a_row    0.5720            0.5697  0.0023   0.0006
+    v1    lr   S1_r2_d0  20    b_unit    0.7880            0.7856  0.0024  -0.0001
+    v1   knn      S2_k4 180 c_patient    0.5728            0.5697  0.0031   0.0014
+    v1   knn    control  20     a_row    0.6525            0.6493  0.0033  -0.0009
+    v1   knn    control  20    b_unit    0.6525            0.6493  0.0033  -0.0009
+    v1   knn    control  20 c_patient    0.6533            0.6493  0.0040  -0.0002
+    v1    lr    control  20    b_unit    0.7562            0.7519  0.0044  -0.0047
+    v1    lr    control  20     a_row    0.7562            0.7519  0.0044  -0.0047
+    v1    lr S1_r1_d0.2 180 c_patient    0.6487            0.6442  0.0045  -0.0068
+    v1    lr S1_r1_d0.2 180     a_row    0.6490            0.6442  0.0048  -0.0065
+    v1    lr    control  20 c_patient    0.7570            0.7519  0.0051  -0.0040
+    v1    lr S1_r1_d0.2 180    b_unit    0.6499            0.6442  0.0057  -0.0056
+== 3. control n=20 p=20 ICC 0.9 AUC 0.80: replicates 201-400 (run_id v1-ctrl-ext) ==
+  seed continuity verified (rep 1 recomputed under spawn(400) == stored)
+  pre-stated reading: chance if new-200 |z| < 2 and combined |z| < 3; systematic if new-200 z <= -2 (same sign as before)
+  v1 knn  reps 1-200 (v1)        optimism -0.0197 (MC SE 0.0049, z -4.05, n=200)
+  v1-ctrl-ext knn  reps 201-400 (ext)     optimism -0.0048 (MC SE 0.0049, z -0.98, n=200)
+  v1 knn  reps 1-400 combined    optimism -0.0123 (MC SE 0.0035, z -3.54, n=400)
+  v1 lr   reps 1-200 (v1)        optimism -0.0146 (MC SE 0.0056, z -2.62, n=200)
+  v1-ctrl-ext lr   reps 201-400 (ext)     optimism -0.0025 (MC SE 0.0055, z -0.46, n=200)
+  v1 lr   reps 1-400 combined    optimism -0.0086 (MC SE 0.0039, z -2.19, n=400)
+== 4. decomposition of the two max-inflation cells (run_id v1) ==
+
+  v1 | knn | S2_k8|n30|icc0.9|p20|auc0.50 | 200 replicates | git b80d4a3495
+    AUC row (a)          +1.0000 (SE 0.0000)   2.5/50/97.5%: [1. 1. 1.]
+    AUC unit (b)         +1.0000 (SE 0.0000)   (b = a outside S1)
+    AUC patient (c)      +0.4896 (SE 0.0073)   2.5/50/97.5%: [0.309 0.485 0.711]
+    AUC independent test +0.5003 (SE 0.0009)   (model trained on all rows; truth = 0.50)
+    inflation a - c      +0.5104 (SE 0.0073)
+      = leakage  a - indep        +0.4996 (SE 0.0009)
+      + honest-split bias indep - c +0.0108 (SE 0.0073)
+    pooled-AUC inflation          +0.5133 (SE 0.0073)
+    P(a > 0.6) 1.000  P(a > 0.7) 1.000  P(a > 0.9) 1.000  P(c > 0.7) 0.035
+    skipped single-class test folds per replicate: row 0.00, patient 0.00
+    rows/patient per replicate: mean 8.00, min 8.00, max 8.00; rows mean 240
+
+  v1 | lr | S3|n20|icc0.9|p180|auc0.50 | 200 replicates | git b80d4a3495
+    AUC row (a)          +0.9954 (SE 0.0005)   2.5/50/97.5%: [0.965 0.998 1.   ]
+    AUC unit (b)         +0.9954 (SE 0.0005)   (b = a outside S1)
+    AUC patient (c)      +0.4677 (SE 0.0141)   2.5/50/97.5%: [0.109 0.47  0.831]
+    AUC independent test +0.4987 (SE 0.0009)   (model trained on all rows; truth = 0.50)
+    inflation a - c      +0.5278 (SE 0.0140)
+      = leakage  a - indep        +0.4967 (SE 0.0010)
+      + honest-split bias indep - c +0.0310 (SE 0.0141)
+    pooled-AUC inflation          +0.5062 (SE 0.0139)
+    P(a > 0.6) 1.000  P(a > 0.7) 1.000  P(a > 0.9) 1.000  P(c > 0.7) 0.135
+    skipped single-class test folds per replicate: row 0.00, patient 0.12
+    rows/patient per replicate: mean 4.88, min 2.85, max 9.35; rows mean 98
+    Spearman(inflation, rows/patient) = +0.066
+== 5. RF progress ==
+RF chunks done: 232/9600 (2.4%); cells fully done: 23/960
+cost-weighted progress: 17.6% after 0.53 h
+projected finish: Thu 29 Oct 04:07 AEDT (slowest cells run first, so early projections are pessimistic)
+before 18:00 AEDT 29 Oct
+== done ==

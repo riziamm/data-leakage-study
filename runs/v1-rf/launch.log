@@ -1,0 +1,23 @@
+960 cells x models ['rf'], 200 reps each, jobs=250
+9600 tasks
+[Parallel(n_jobs=250)]: Using backend LokyBackend with 250 concurrent workers.
+[Parallel(n_jobs=250)]: Done 148 tasks      | elapsed: 29.0min
+[Parallel(n_jobs=250)]: Done 382 tasks      | elapsed: 47.4min
+[Parallel(n_jobs=250)]: Done 652 tasks      | elapsed: 62.3min
+[Parallel(n_jobs=250)]: Done 958 tasks      | elapsed: 69.3min
+[Parallel(n_jobs=250)]: Done 1300 tasks      | elapsed: 89.4min
+[Parallel(n_jobs=250)]: Done 1678 tasks      | elapsed: 100.3min
+[Parallel(n_jobs=250)]: Done 2092 tasks      | elapsed: 114.0min
+[Parallel(n_jobs=250)]: Done 2542 tasks      | elapsed: 126.2min
+[Parallel(n_jobs=250)]: Done 3028 tasks      | elapsed: 142.8min
+[Parallel(n_jobs=250)]: Done 3550 tasks      | elapsed: 154.6min
+[Parallel(n_jobs=250)]: Done 4108 tasks      | elapsed: 173.8min
+[Parallel(n_jobs=250)]: Done 4702 tasks      | elapsed: 189.3min
+[Parallel(n_jobs=250)]: Done 5332 tasks      | elapsed: 204.5min
+[Parallel(n_jobs=250)]: Done 5998 tasks      | elapsed: 226.1min
+[Parallel(n_jobs=250)]: Done 6700 tasks      | elapsed: 240.5min
+[Parallel(n_jobs=250)]: Done 7438 tasks      | elapsed: 259.1min
+[Parallel(n_jobs=250)]: Done 8212 tasks      | elapsed: 277.7min
+[Parallel(n_jobs=250)]: Done 9022 tasks      | elapsed: 295.9min
+[Parallel(n_jobs=250)]: Done 9600 out of 9600 | elapsed: 306.1min finished
+done in 18366s

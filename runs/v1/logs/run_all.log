@@ -1,0 +1,387 @@
+2026-10-29 00:52:27  SKIP  unpack (already done)
+2026-10-29 00:52:27  SKIP  env (already done)
+python 3.11.18
+2026-10-29 00:52:27  cores=250 availRAM=528GB workers=250 run_id=v1 chunks=10 rf=1
+2026-10-29 00:52:27  SKIP  tests_static (already done)
+2026-10-29 00:52:27  START grid_lrknn (attempt 1/5): jobs/launch_local.sh v1 250 lr knn
+960 cells x models ['lr', 'knn'], 200 reps each, jobs=250
+960 tasks
+[Parallel(n_jobs=250)]: Using backend LokyBackend with 250 concurrent workers.
+joblib.externals.loky.process_executor._RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/externals/loky/process_executor.py", line 453, in _process_worker
+    call_item = call_queue.get(block=True, timeout=timeout)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/u5499379/.local/share/uv/python/cpython-3.11.18-linux-x86_64-gnu/lib/python3.11/multiprocessing/queues.py", line 122, in get
+    return _ForkingPickler.loads(res)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: Can't get attribute 'code_hash' on <module 'joblib.externals.loky.backend.popen_loky_posix' from '/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/externals/loky/backend/popen_loky_posix.py'>
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/u5499379/projects/mie27-unit-leakage/src/mie27/run.py", line 206, in <module>
+    main()
+  File "/home/u5499379/projects/mie27-unit-leakage/src/mie27/run.py", line 200, in main
+    Parallel(n_jobs=a.jobs, verbose=5)(delayed(run_cell)(c, a.models, a.reps, out_dir, ch)
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/parallel.py", line 2098, in __call__
+    return output if self.return_generator else list(output)
+                                                ^^^^^^^^^^^^
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/parallel.py", line 1704, in _get_outputs
+    yield from self._retrieve()
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/parallel.py", line 1806, in _retrieve
+    self._raise_error_fast()
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/parallel.py", line 1885, in _raise_error_fast
+    error_job.get_result(self.timeout)
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/parallel.py", line 780, in get_result
+    return self._return_or_raise()
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/parallel.py", line 795, in _return_or_raise
+    raise self._result
+joblib.externals.loky.process_executor.BrokenProcessPool: A task has failed to un-serialize. Please ensure that the arguments of the function are all picklable.
+2026-10-29 00:53:46  FAIL  grid_lrknn (attempt 1)
+2026-10-29 00:54:16  START grid_lrknn (attempt 2/5): jobs/launch_local.sh v1 250 lr knn
+960 cells x models ['lr', 'knn'], 200 reps each, jobs=250
+960 tasks
+[Parallel(n_jobs=250)]: Using backend LokyBackend with 250 concurrent workers.
+joblib.externals.loky.process_executor._RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/externals/loky/process_executor.py", line 453, in _process_worker
+    call_item = call_queue.get(block=True, timeout=timeout)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/u5499379/.local/share/uv/python/cpython-3.11.18-linux-x86_64-gnu/lib/python3.11/multiprocessing/queues.py", line 122, in get
+    return _ForkingPickler.loads(res)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: Can't get attribute 'code_hash' on <module 'joblib.externals.loky.backend.popen_loky_posix' from '/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/externals/loky/backend/popen_loky_posix.py'>
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/u5499379/projects/mie27-unit-leakage/src/mie27/run.py", line 206, in <module>
+    main()
+  File "/home/u5499379/projects/mie27-unit-leakage/src/mie27/run.py", line 200, in main
+    Parallel(n_jobs=a.jobs, verbose=5)(delayed(run_cell)(c, a.models, a.reps, out_dir, ch)
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/parallel.py", line 2098, in __call__
+    return output if self.return_generator else list(output)
+                                                ^^^^^^^^^^^^
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/parallel.py", line 1704, in _get_outputs
+    yield from self._retrieve()
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/parallel.py", line 1806, in _retrieve
+    self._raise_error_fast()
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/parallel.py", line 1885, in _raise_error_fast
+    error_job.get_result(self.timeout)
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/parallel.py", line 780, in get_result
+    return self._return_or_raise()
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/parallel.py", line 795, in _return_or_raise
+    raise self._result
+joblib.externals.loky.process_executor.BrokenProcessPool: A task has failed to un-serialize. Please ensure that the arguments of the function are all picklable.
+2026-10-29 00:55:34  FAIL  grid_lrknn (attempt 2)
+2026-10-29 00:56:34  START grid_lrknn (attempt 3/5): jobs/launch_local.sh v1 250 lr knn
+960 cells x models ['lr', 'knn'], 200 reps each, jobs=250
+960 tasks
+[Parallel(n_jobs=250)]: Using backend LokyBackend with 250 concurrent workers.
+jobs/launch_local.sh: line 11: 3004351 Killed                  exec python -m mie27.run --run-id "$RUN_ID" --runs-dir "$RUNS_DIR" --models $MODELS --reps "$REPS" --jobs "$N" --chunks "${CHUNKS:-1}" 2>&1
+     3004352 Done                    | tee -a "$RUNS_DIR/$RUN_ID/launch.log"
+2026-10-29 00:58:09  SKIP  unpack (already done)
+2026-10-29 00:58:09  SKIP  env (already done)
+python 3.11.18
+2026-10-29 00:58:09  cores=250 availRAM=528GB workers=250 run_id=v1 chunks=10 rf=1
+2026-10-29 00:58:09  SKIP  tests_static (already done)
+2026-10-29 00:58:09  START grid_lrknn (attempt 1/5): jobs/launch_local.sh v1 250 lr knn
+960 cells x models ['lr', 'knn'], 200 reps each, jobs=250
+960 tasks
+[Parallel(n_jobs=250)]: Using backend LokyBackend with 250 concurrent workers.
+[Parallel(n_jobs=250)]: Done 148 tasks      | elapsed:  3.2min
+[Parallel(n_jobs=250)]: Done 382 tasks      | elapsed:  4.8min
+[Parallel(n_jobs=250)]: Done 654 out of 960 | elapsed:  5.8min remaining:  2.7min
+[Parallel(n_jobs=250)]: Done 847 out of 960 | elapsed:  6.4min remaining:   51.6s
+[Parallel(n_jobs=250)]: Done 960 out of 960 | elapsed:  6.7min finished
+done in 404s
+2026-10-29 01:04:58  DONE  grid_lrknn
+2026-10-29 01:04:58  START verify_lrknn (attempt 1/5): verify_reps v1 lr knn
+0 incomplete (cell, model) pairs
+
+2026-10-29 01:05:03  DONE  verify_lrknn
+2026-10-29 01:05:03  START grid_rf (attempt 1/5): rf_launch
+960 cells x models ['rf'], 200 reps each, jobs=250
+9600 tasks
+[Parallel(n_jobs=250)]: Using backend LokyBackend with 250 concurrent workers.
+[Parallel(n_jobs=250)]: Done 148 tasks      | elapsed: 29.0min
+[Parallel(n_jobs=250)]: Done 382 tasks      | elapsed: 47.4min
+[Parallel(n_jobs=250)]: Done 652 tasks      | elapsed: 62.3min
+[Parallel(n_jobs=250)]: Done 958 tasks      | elapsed: 69.3min
+[Parallel(n_jobs=250)]: Done 1300 tasks      | elapsed: 89.4min
+[Parallel(n_jobs=250)]: Done 1678 tasks      | elapsed: 100.3min
+[Parallel(n_jobs=250)]: Done 2092 tasks      | elapsed: 114.0min
+[Parallel(n_jobs=250)]: Done 2542 tasks      | elapsed: 126.2min
+[Parallel(n_jobs=250)]: Done 3028 tasks      | elapsed: 142.8min
+[Parallel(n_jobs=250)]: Done 3550 tasks      | elapsed: 154.6min
+[Parallel(n_jobs=250)]: Done 4108 tasks      | elapsed: 173.8min
+[Parallel(n_jobs=250)]: Done 4702 tasks      | elapsed: 189.3min
+[Parallel(n_jobs=250)]: Done 5332 tasks      | elapsed: 204.5min
+[Parallel(n_jobs=250)]: Done 5998 tasks      | elapsed: 226.1min
+[Parallel(n_jobs=250)]: Done 6700 tasks      | elapsed: 240.5min
+[Parallel(n_jobs=250)]: Done 7438 tasks      | elapsed: 259.1min
+[Parallel(n_jobs=250)]: Done 8212 tasks      | elapsed: 277.7min
+[Parallel(n_jobs=250)]: Done 9022 tasks      | elapsed: 295.9min
+[Parallel(n_jobs=250)]: Done 9600 out of 9600 | elapsed: 306.1min finished
+done in 18366s
+2026-10-29 06:11:12  DONE  grid_rf
+2026-10-29 06:11:12  START verify_rf (attempt 1/5): verify_reps v1-rf rf
+0 incomplete (cell, model) pairs
+
+2026-10-29 06:11:29  DONE  verify_rf
+2026-10-29 06:11:29  START merge_rf (attempt 1/5): merge_rf
+2026-10-29 06:11:30  DONE  merge_rf
+2026-10-29 06:11:30  START summarise (attempt 1/5): python -m mie27.summarise --run-id v1
+8640 rows -> runs/v1/results.csv; models=['knn', 'lr', 'rf']; reps/cell: min=200 max=200
+2026-10-29 06:12:45  DONE  summarise
+============================= test session starts ==============================
+platform linux -- Python 3.11.18, pytest-9.2.0, pluggy-1.7.0 -- /home/u5499379/projects/mie27-unit-leakage/.venv/bin/python
+rootdir: /home/u5499379/projects/mie27-unit-leakage
+configfile: pyproject.toml
+collecting ... collected 77 items
+
+tests/test_acceptance.py::test_0_full_replication PASSED                 [  1%]
+tests/test_acceptance.py::test_1_icc0_no_optimism[lr] PASSED             [  2%]
+tests/test_acceptance.py::test_1_icc0_no_optimism[knn] PASSED            [  3%]
+tests/test_acceptance.py::test_1_icc0_no_optimism[rf] PASSED             [  5%]
+tests/test_acceptance.py::test_2_control_no_optimism[lr] PASSED          [  6%]
+tests/test_acceptance.py::test_2_control_no_optimism[knn] PASSED         [  7%]
+tests/test_acceptance.py::test_2_control_no_optimism[rf] PASSED          [  9%]
+tests/test_acceptance.py::test_3_splits_match_independent_auc FAILED     [ 10%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.0-control] PASSED [ 11%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.0-S1_r1_d0] PASSED [ 12%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.0-S1_r1_d0.2] PASSED [ 14%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.0-S1_r2_d0] PASSED [ 15%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.0-S1_r2_d0.2] PASSED [ 16%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.0-S2_k4] PASSED [ 18%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.0-S2_k8] PASSED [ 19%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.0-S3] PASSED [ 20%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.3-control] PASSED [ 22%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.3-S1_r1_d0] PASSED [ 23%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.3-S1_r1_d0.2] PASSED [ 24%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.3-S1_r2_d0] PASSED [ 25%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.3-S1_r2_d0.2] PASSED [ 27%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.3-S2_k4] PASSED [ 28%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.3-S2_k8] PASSED [ 29%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.3-S3] PASSED [ 31%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.6-control] PASSED [ 32%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.6-S1_r1_d0] PASSED [ 33%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.6-S1_r1_d0.2] PASSED [ 35%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.6-S1_r2_d0] PASSED [ 36%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.6-S1_r2_d0.2] PASSED [ 37%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.6-S2_k4] PASSED [ 38%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.6-S2_k8] PASSED [ 40%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.6-S3] PASSED [ 41%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.9-control] PASSED [ 42%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.9-S1_r1_d0] PASSED [ 44%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.9-S1_r1_d0.2] PASSED [ 45%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.9-S1_r2_d0] PASSED [ 46%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.9-S1_r2_d0.2] PASSED [ 48%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.9-S2_k4] PASSED [ 49%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.9-S2_k8] PASSED [ 50%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.9-S3] PASSED [ 51%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[20-control] PASSED [ 53%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[20-S1_r1_d0] PASSED [ 54%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[20-S1_r1_d0.2] PASSED [ 55%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[20-S1_r2_d0] PASSED [ 57%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[20-S1_r2_d0.2] PASSED [ 58%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[20-S2_k4] PASSED [ 59%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[20-S2_k8] PASSED [ 61%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[20-S3] PASSED    [ 62%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[200-control] PASSED [ 63%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[200-S1_r1_d0] PASSED [ 64%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[200-S1_r1_d0.2] PASSED [ 66%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[200-S1_r2_d0] PASSED [ 67%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[200-S1_r2_d0.2] PASSED [ 68%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[200-S2_k4] PASSED [ 70%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[200-S2_k8] PASSED [ 71%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[200-S3] PASSED   [ 72%]
+tests/test_acceptance.py::test_4b_guard_fires_on_leaky_folds PASSED      [ 74%]
+tests/test_acceptance.py::test_5_calibration[0.5-20] PASSED              [ 75%]
+tests/test_acceptance.py::test_5_calibration[0.5-180] PASSED             [ 76%]
+tests/test_acceptance.py::test_5_calibration[0.65-20] PASSED             [ 77%]
+tests/test_acceptance.py::test_5_calibration[0.65-180] PASSED            [ 79%]
+tests/test_acceptance.py::test_5_calibration[0.8-20] PASSED              [ 80%]
+tests/test_acceptance.py::test_5_calibration[0.8-180] PASSED             [ 81%]
+tests/test_fast_equivalence.py::test_auc_matches_sklearn_including_ties PASSED [ 83%]
+tests/test_fast_equivalence.py::test_knn_matches_sklearn[S2_k8-50-180] PASSED [ 84%]
+tests/test_fast_equivalence.py::test_knn_matches_sklearn[S3-30-20] PASSED [ 85%]
+tests/test_fast_equivalence.py::test_knn_matches_sklearn[S1_r2_d0.2-20-180] PASSED [ 87%]
+tests/test_fast_equivalence.py::test_lr_matches_sklearn_pipeline[S2_k8-50-180] PASSED [ 88%]
+tests/test_fast_equivalence.py::test_lr_matches_sklearn_pipeline[S3-30-20] PASSED [ 89%]
+tests/test_fast_equivalence.py::test_lr_matches_sklearn_pipeline[control-20-180] PASSED [ 90%]
+tests/test_fast_equivalence.py::test_stratified_group_kfold_identical_to_sklearn[control] PASSED [ 92%]
+tests/test_fast_equivalence.py::test_stratified_group_kfold_identical_to_sklearn[S1_r1_d0.2] PASSED [ 93%]
+tests/test_fast_equivalence.py::test_stratified_group_kfold_identical_to_sklearn[S1_r2_d0.2] PASSED [ 94%]
+tests/test_fast_equivalence.py::test_stratified_group_kfold_identical_to_sklearn[S2_k8] PASSED [ 96%]
+tests/test_fast_equivalence.py::test_stratified_group_kfold_identical_to_sklearn[S3] PASSED [ 97%]
+tests/test_reproducibility.py::test_extending_replicates_equals_running_at_once PASSED [ 98%]
+tests/test_reproducibility.py::test_models_run_separately_see_same_data PASSED [100%]
+
+=================================== FAILURES ===================================
+_____________________ test_3_splits_match_independent_auc ______________________
+
+results =                                   cell_id  ...                                  git_hash
+0     S1_r1_d0.2|n100|icc0.3|...092c
+8639         control|n50|icc0|p20|auc0.80  ...  b80d4a349551b162a35233baaac67763aea8092c
+
+[8640 rows x 30 columns]
+
+    def test_3_splits_match_independent_auc(results):
+        from conftest import run_dir
+        d = results[(results.true_auc == 0.8) & (results.n == 200) & (results.icc == 0)].copy()
+        assert not d.empty
+        path = run_dir() / "test3_comparator80.csv"
+        assert path.exists(), f"missing {path}: run scripts/test3_comparator.py first"
+        comp = pd.read_csv(path)
+        missing = sorted(set(d.model) - set(comp.model))
+>       assert not missing, f"comparator lacks models {missing}"
+E       AssertionError: comparator lacks models ['rf']
+E       assert not ['rf']
+
+tests/test_acceptance.py:72: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_acceptance.py::test_3_splits_match_independent_auc - Assert...
+======================== 1 failed, 76 passed in 26.82s =========================
+2026-10-29 06:13:13  ACCEPTANCE TESTS FAILED — figures will be DRAFT only
+2026-10-29 06:13:13  START figures (attempt 1/5): figs
+wrote figures to runs/v1 (DRAFT)
+2026-10-29 06:13:15  DONE  figures
+2026-10-29 06:13:15  START calculator (attempt 1/5): bash -c python -m mie27.build_calculator --run-id 'v1' | tee 'runs/v1/calculator_report.txt'
+in-sample / LOO fit error:
+         n_cells     rmse  max_abs  loo_rmse  mc_se_mean
+knn|20     300.0  0.01465  0.06504   0.01581     0.00328
+knn|180    300.0  0.01302  0.04278   0.01402     0.00345
+lr|20      300.0  0.01679  0.04961   0.01824     0.00319
+lr|180     300.0  0.01996  0.07313   0.02179     0.00439
+rf|20      300.0  0.01740  0.05531   0.01878     0.00382
+rf|180     300.0  0.02287  0.07513   0.02491     0.00453
+
+held-out validation (20% of cells):
+model   p  n_heldout  heldout_rmse  heldout_max_abs  heldout_mc_se_mean
+  knn  20         69      0.013223         0.048052            0.002690
+  knn 180         69      0.014481         0.040549            0.002916
+   lr  20         69      0.015499         0.042927            0.002558
+   lr 180         69      0.021092         0.063664            0.003614
+   rf  20         69      0.015787         0.044326            0.003096
+   rf 180         69      0.023443         0.081981            0.003776
+2026-10-29 06:13:16  DONE  calculator
+2026-10-29 06:13:16  START pr_body (attempt 1/5): bash -c { echo '## Tests'; cat 'runs/v1/test_output.txt'; echo; echo '## Calculator'; cat 'runs/v1/calculator_report.txt'; echo; echo '## Calibration'; cat 'runs/v1/calibration.csv'; echo; echo '## Code'; git status --short | wc -l | sed 's/^/uncommitted files: /'; } > 'runs/v1/PR_BODY.md'
+2026-10-29 06:13:16  DONE  pr_body
+2026-10-29 06:13:16  ALL DONE. Outputs: /home/u5499379/projects/mie27-unit-leakage/runs/v1  (results.csv, fig1_nomogram*.pdf, fig2_null*.pdf, calculator.py, PR_BODY.md)
+2026-10-29 06:13:16  NOTE: acceptance tests failed; see runs/v1/test_output.txt; figures are DRAFT. Fix, then: rm /home/u5499379/projects/.state/{acceptance.failed,figures.done} and rerun.
+2026-10-29 10:55:49  SKIP  unpack (already done)
+2026-10-29 10:55:49  SKIP  env (already done)
+python 3.11.18
+2026-10-29 10:55:49  cores=250 availRAM=528GB workers=250 run_id=v1 chunks=10 rf=1
+2026-10-29 10:55:49  SKIP  tests_static (already done)
+2026-10-29 10:55:49  SKIP  grid_lrknn (already done)
+2026-10-29 10:55:49  SKIP  verify_lrknn (already done)
+2026-10-29 10:55:49  SKIP  grid_rf (already done)
+2026-10-29 10:55:49  SKIP  verify_rf (already done)
+2026-10-29 10:55:49  SKIP  merge_rf (already done)
+2026-10-29 10:55:49  SKIP  summarise (already done)
+============================= test session starts ==============================
+platform linux -- Python 3.11.18, pytest-9.2.0, pluggy-1.7.0 -- /home/u5499379/projects/mie27-unit-leakage/.venv/bin/python
+rootdir: /home/u5499379/projects/mie27-unit-leakage
+configfile: pyproject.toml
+collecting ... collected 77 items
+
+tests/test_acceptance.py::test_0_full_replication PASSED                 [  1%]
+tests/test_acceptance.py::test_1_icc0_no_optimism[lr] PASSED             [  2%]
+tests/test_acceptance.py::test_1_icc0_no_optimism[knn] PASSED            [  3%]
+tests/test_acceptance.py::test_1_icc0_no_optimism[rf] PASSED             [  5%]
+tests/test_acceptance.py::test_2_control_no_optimism[lr] PASSED          [  6%]
+tests/test_acceptance.py::test_2_control_no_optimism[knn] PASSED         [  7%]
+tests/test_acceptance.py::test_2_control_no_optimism[rf] PASSED          [  9%]
+tests/test_acceptance.py::test_3_splits_match_independent_auc PASSED     [ 10%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.0-control] PASSED [ 11%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.0-S1_r1_d0] PASSED [ 12%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.0-S1_r1_d0.2] PASSED [ 14%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.0-S1_r2_d0] PASSED [ 15%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.0-S1_r2_d0.2] PASSED [ 16%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.0-S2_k4] PASSED [ 18%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.0-S2_k8] PASSED [ 19%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.0-S3] PASSED [ 20%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.3-control] PASSED [ 22%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.3-S1_r1_d0] PASSED [ 23%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.3-S1_r1_d0.2] PASSED [ 24%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.3-S1_r2_d0] PASSED [ 25%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.3-S1_r2_d0.2] PASSED [ 27%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.3-S2_k4] PASSED [ 28%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.3-S2_k8] PASSED [ 29%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.3-S3] PASSED [ 31%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.6-control] PASSED [ 32%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.6-S1_r1_d0] PASSED [ 33%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.6-S1_r1_d0.2] PASSED [ 35%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.6-S1_r2_d0] PASSED [ 36%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.6-S1_r2_d0.2] PASSED [ 37%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.6-S2_k4] PASSED [ 38%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.6-S2_k8] PASSED [ 40%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.6-S3] PASSED [ 41%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.9-control] PASSED [ 42%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.9-S1_r1_d0] PASSED [ 44%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.9-S1_r1_d0.2] PASSED [ 45%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.9-S1_r2_d0] PASSED [ 46%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.9-S1_r2_d0.2] PASSED [ 48%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.9-S2_k4] PASSED [ 49%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.9-S2_k8] PASSED [ 50%]
+tests/test_acceptance.py::test_3b_variance_components_sum_to_one[0.9-S3] PASSED [ 51%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[20-control] PASSED [ 53%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[20-S1_r1_d0] PASSED [ 54%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[20-S1_r1_d0.2] PASSED [ 55%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[20-S1_r2_d0] PASSED [ 57%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[20-S1_r2_d0.2] PASSED [ 58%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[20-S2_k4] PASSED [ 59%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[20-S2_k8] PASSED [ 61%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[20-S3] PASSED    [ 62%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[200-control] PASSED [ 63%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[200-S1_r1_d0] PASSED [ 64%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[200-S1_r1_d0.2] PASSED [ 66%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[200-S1_r2_d0] PASSED [ 67%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[200-S1_r2_d0.2] PASSED [ 68%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[200-S2_k4] PASSED [ 70%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[200-S2_k8] PASSED [ 71%]
+tests/test_acceptance.py::test_4_patient_split_disjoint[200-S3] PASSED   [ 72%]
+tests/test_acceptance.py::test_4b_guard_fires_on_leaky_folds PASSED      [ 74%]
+tests/test_acceptance.py::test_5_calibration[0.5-20] PASSED              [ 75%]
+tests/test_acceptance.py::test_5_calibration[0.5-180] PASSED             [ 76%]
+tests/test_acceptance.py::test_5_calibration[0.65-20] PASSED             [ 77%]
+tests/test_acceptance.py::test_5_calibration[0.65-180] PASSED            [ 79%]
+tests/test_acceptance.py::test_5_calibration[0.8-20] PASSED              [ 80%]
+tests/test_acceptance.py::test_5_calibration[0.8-180] PASSED             [ 81%]
+tests/test_fast_equivalence.py::test_auc_matches_sklearn_including_ties PASSED [ 83%]
+tests/test_fast_equivalence.py::test_knn_matches_sklearn[S2_k8-50-180] PASSED [ 84%]
+tests/test_fast_equivalence.py::test_knn_matches_sklearn[S3-30-20] PASSED [ 85%]
+tests/test_fast_equivalence.py::test_knn_matches_sklearn[S1_r2_d0.2-20-180] PASSED [ 87%]
+tests/test_fast_equivalence.py::test_lr_matches_sklearn_pipeline[S2_k8-50-180] PASSED [ 88%]
+tests/test_fast_equivalence.py::test_lr_matches_sklearn_pipeline[S3-30-20] PASSED [ 89%]
+tests/test_fast_equivalence.py::test_lr_matches_sklearn_pipeline[control-20-180] PASSED [ 90%]
+tests/test_fast_equivalence.py::test_stratified_group_kfold_identical_to_sklearn[control] PASSED [ 92%]
+tests/test_fast_equivalence.py::test_stratified_group_kfold_identical_to_sklearn[S1_r1_d0.2] PASSED [ 93%]
+tests/test_fast_equivalence.py::test_stratified_group_kfold_identical_to_sklearn[S1_r2_d0.2] PASSED [ 94%]
+tests/test_fast_equivalence.py::test_stratified_group_kfold_identical_to_sklearn[S2_k8] PASSED [ 96%]
+tests/test_fast_equivalence.py::test_stratified_group_kfold_identical_to_sklearn[S3] PASSED [ 97%]
+tests/test_reproducibility.py::test_extending_replicates_equals_running_at_once PASSED [ 98%]
+tests/test_reproducibility.py::test_models_run_separately_see_same_data PASSED [100%]
+
+============================= 77 passed in 26.32s ==============================
+2026-10-29 10:56:16  DONE  acceptance
+2026-10-29 10:56:16  START figures (attempt 1/5): figs
+wrote figures to runs/v1 (final)
+2026-10-29 10:56:18  DONE  figures
+2026-10-29 10:56:18  SKIP  calculator (already done)
+2026-10-29 10:56:18  START pr_body (attempt 1/5): bash -c { echo '## Tests'; cat 'runs/v1/test_output.txt'; echo; echo '## Calculator'; cat 'runs/v1/calculator_report.txt'; echo; echo '## Calibration'; cat 'runs/v1/calibration.csv'; echo; echo '## Code'; git status --short | wc -l | sed 's/^/uncommitted files: /'; } > 'runs/v1/PR_BODY.md'
+2026-10-29 10:56:18  DONE  pr_body
+2026-10-29 10:56:18  ALL DONE. Outputs: /home/u5499379/projects/mie27-unit-leakage/runs/v1  (results.csv, fig1_nomogram*.pdf, fig2_null*.pdf, calculator.py, PR_BODY.md)
