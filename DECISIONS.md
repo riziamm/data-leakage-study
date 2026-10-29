@@ -39,8 +39,11 @@ Patient labels are redrawn if either class has < 2 patients (otherwise CV AUC is
 undefined). Probability ≈ 4e-5 at n = 20; count stored (redraws_total).
 
 ## D6. Calculator scope
-Fitted on control, S2_k4, S2_k8, S3 (patient → rows). S1 excluded: its eye
-nesting and per-eye discordant labels are not a function of k_mean.
+Fitted on control, S1_r1_d0, S2_k4, S2_k8, S3 (patient → rows). S1_r1_d0 is
+included because one row per eye with concordant labels is identical in
+distribution to a k = 2 patient cluster. Other S1 variants are excluded: with
+r = 2 the eye level adds a second clustering layer, and with d = 0.2 labels
+differ within a patient, so neither is a function of k_mean.
 Signature optimism(n, k_mean, icc, p, model) plus keyword true_auc (default 0.65,
 grid midpoint), because optimism depends on signal strength. p is categorical
 {20, 180}: two values cannot support interpolation. Form:
