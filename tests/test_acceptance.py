@@ -58,14 +58,27 @@ def test_2_control_no_optimism(results, model):
 
 
 # ---- 3. AUC 0.80, n = 200, ICC = 0 -> every split within 0.02 of the model's own
-#         independent-test AUC (accepted 28 Oct; the oracle 0.80 is not the target) ----
+#         independent-test AUC when trained on 80% of patients (the CV training size).
+#         Comparator from scripts/test3_comparator.py (approved 29 Oct; the earlier
+#         100%-trained comparator was biased high by the learning curve, D3b).
 def test_3_splits_match_independent_auc(results):
+    from conftest import run_dir
     d = results[(results.true_auc == 0.8) & (results.n == 200) & (results.icc == 0)].copy()
     assert not d.empty
-    d["gap"] = d.auc_mean - d.auc_indep_mean
+    path = run_dir() / "test3_comparator80.csv"
+    assert path.exists(), f"missing {path}: run scripts/test3_comparator.py first"
+    comp = pd.read_csv(path)
+    missing = sorted(set(d.model) - set(comp.model))
+    assert not missing, f"comparator lacks models {missing}"
+    unverified = comp[comp.model.isin(d.model) & ~comp.regen_ok.astype(bool)]
+    assert unverified.empty, "replicate regeneration not verified:\n" + unverified.to_string()
+    d = d.merge(comp[["cell_id", "model", "auc_indep80_mean", "auc_indep80_mcse"]],
+                on=["cell_id", "model"], how="left")
+    assert d.auc_indep80_mean.notna().all()
+    d["gap"] = d.auc_mean - d.auc_indep80_mean
     bad = d[d.gap.abs() > 0.02]
     assert bad.empty, _report(bad, ["scenario", "p", "model", "split", "auc_mean",
-                                    "auc_indep_mean", "gap", "n_reps"])
+                                    "auc_indep80_mean", "auc_indep_mean", "gap", "n_reps"])
 
 
 # ---- 3b. variance components sum to 1 on the full grid ----------------------

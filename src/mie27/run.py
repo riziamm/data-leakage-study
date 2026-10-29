@@ -203,4 +203,5 @@ def main(argv=None):
 
 
 if __name__ == "__main__":
-    main()
+    from mie27.run import main as _main
+    _main()

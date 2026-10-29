@@ -39,8 +39,11 @@ Patient labels are redrawn if either class has < 2 patients (otherwise CV AUC is
 undefined). Probability ≈ 4e-5 at n = 20; count stored (redraws_total).
 
 ## D6. Calculator scope
-Fitted on control, S2_k4, S2_k8, S3 (patient → rows). S1 excluded: its eye
-nesting and per-eye discordant labels are not a function of k_mean.
+Fitted on control, S1_r1_d0, S2_k4, S2_k8, S3 (patient → rows). S1_r1_d0 is
+included because one row per eye with concordant labels is identical in
+distribution to a k = 2 patient cluster. Other S1 variants are excluded: with
+r = 2 the eye level adds a second clustering layer, and with d = 0.2 labels
+differ within a patient, so neither is a function of k_mean.
 Signature optimism(n, k_mean, icc, p, model) plus keyword true_auc (default 0.65,
 grid midpoint), because optimism depends on signal strength. p is categorical
 {20, 180}: two values cannot support interpolation. Form:
@@ -91,3 +94,13 @@ degree 2 stays. Held-out (20% of cells) RMSE and max |error| are written to
 calculator_validation.csv on every build; judge the surface on the 200-rep run.
 A 10-replicate partial run from before the code freeze is kept only as
 runs/stale-v1-10rep-DO-NOT-USE and feeds nothing downstream.
+
+## D3b. Test-3 comparator trained on 80% of patients (approved 29 Oct)
+On run v1 (git b80d4a3), test 3 failed in 4 LR p = 180 rows by −0.0202 to −0.0204
+on every split, including the row split: CV models train on 80% of patients while
+auc_indep was trained on 100%, so the comparator was biased high by the learning
+curve. Comparator now = independent-test AUC of the same model trained on a
+stratified random 80% of patients, from a fresh SeedSequence child of each
+replicate (scripts/test3_comparator.py). Each replicate is regenerated from its
+seed and must reproduce the stored full-data auc_indep (|diff| < 1e-9) before the
+comparator is accepted. Tolerance unchanged (±0.02).
