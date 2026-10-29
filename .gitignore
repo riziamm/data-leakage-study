@@ -1,0 +1,7 @@
+early/*/cells/
+early/*/replicates.csv.gz
+
+runs/*/cells/
+runs/*/replicates.csv.gz
+early/
+.venv/

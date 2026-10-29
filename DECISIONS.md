@@ -91,3 +91,13 @@ degree 2 stays. Held-out (20% of cells) RMSE and max |error| are written to
 calculator_validation.csv on every build; judge the surface on the 200-rep run.
 A 10-replicate partial run from before the code freeze is kept only as
 runs/stale-v1-10rep-DO-NOT-USE and feeds nothing downstream.
+
+## D3b. Test-3 comparator trained on 80% of patients (approved 29 Oct)
+On run v1 (git b80d4a3), test 3 failed in 4 LR p = 180 rows by −0.0202 to −0.0204
+on every split, including the row split: CV models train on 80% of patients while
+auc_indep was trained on 100%, so the comparator was biased high by the learning
+curve. Comparator now = independent-test AUC of the same model trained on a
+stratified random 80% of patients, from a fresh SeedSequence child of each
+replicate (scripts/test3_comparator.py). Each replicate is regenerated from its
+seed and must reproduce the stored full-data auc_indep (|diff| < 1e-9) before the
+comparator is accepted. Tolerance unchanged (±0.02).

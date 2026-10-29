@@ -1,0 +1,90 @@
+960 cells x models ['lr', 'knn'], 200 reps each, jobs=250
+960 tasks
+[Parallel(n_jobs=250)]: Using backend LokyBackend with 250 concurrent workers.
+joblib.externals.loky.process_executor._RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/externals/loky/process_executor.py", line 453, in _process_worker
+    call_item = call_queue.get(block=True, timeout=timeout)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/u5499379/.local/share/uv/python/cpython-3.11.18-linux-x86_64-gnu/lib/python3.11/multiprocessing/queues.py", line 122, in get
+    return _ForkingPickler.loads(res)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: Can't get attribute 'code_hash' on <module 'joblib.externals.loky.backend.popen_loky_posix' from '/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/externals/loky/backend/popen_loky_posix.py'>
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/u5499379/projects/mie27-unit-leakage/src/mie27/run.py", line 206, in <module>
+    main()
+  File "/home/u5499379/projects/mie27-unit-leakage/src/mie27/run.py", line 200, in main
+    Parallel(n_jobs=a.jobs, verbose=5)(delayed(run_cell)(c, a.models, a.reps, out_dir, ch)
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/parallel.py", line 2098, in __call__
+    return output if self.return_generator else list(output)
+                                                ^^^^^^^^^^^^
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/parallel.py", line 1704, in _get_outputs
+    yield from self._retrieve()
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/parallel.py", line 1806, in _retrieve
+    self._raise_error_fast()
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/parallel.py", line 1885, in _raise_error_fast
+    error_job.get_result(self.timeout)
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/parallel.py", line 780, in get_result
+    return self._return_or_raise()
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/parallel.py", line 795, in _return_or_raise
+    raise self._result
+joblib.externals.loky.process_executor.BrokenProcessPool: A task has failed to un-serialize. Please ensure that the arguments of the function are all picklable.
+960 cells x models ['lr', 'knn'], 200 reps each, jobs=250
+960 tasks
+[Parallel(n_jobs=250)]: Using backend LokyBackend with 250 concurrent workers.
+joblib.externals.loky.process_executor._RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/externals/loky/process_executor.py", line 453, in _process_worker
+    call_item = call_queue.get(block=True, timeout=timeout)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/u5499379/.local/share/uv/python/cpython-3.11.18-linux-x86_64-gnu/lib/python3.11/multiprocessing/queues.py", line 122, in get
+    return _ForkingPickler.loads(res)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: Can't get attribute 'code_hash' on <module 'joblib.externals.loky.backend.popen_loky_posix' from '/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/externals/loky/backend/popen_loky_posix.py'>
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/u5499379/projects/mie27-unit-leakage/src/mie27/run.py", line 206, in <module>
+    main()
+  File "/home/u5499379/projects/mie27-unit-leakage/src/mie27/run.py", line 200, in main
+    Parallel(n_jobs=a.jobs, verbose=5)(delayed(run_cell)(c, a.models, a.reps, out_dir, ch)
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/parallel.py", line 2098, in __call__
+    return output if self.return_generator else list(output)
+                                                ^^^^^^^^^^^^
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/parallel.py", line 1704, in _get_outputs
+    yield from self._retrieve()
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/parallel.py", line 1806, in _retrieve
+    self._raise_error_fast()
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/parallel.py", line 1885, in _raise_error_fast
+    error_job.get_result(self.timeout)
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/parallel.py", line 780, in get_result
+    return self._return_or_raise()
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/u5499379/projects/mie27-unit-leakage/.venv/lib/python3.11/site-packages/joblib/parallel.py", line 795, in _return_or_raise
+    raise self._result
+joblib.externals.loky.process_executor.BrokenProcessPool: A task has failed to un-serialize. Please ensure that the arguments of the function are all picklable.
+960 cells x models ['lr', 'knn'], 200 reps each, jobs=250
+960 tasks
+[Parallel(n_jobs=250)]: Using backend LokyBackend with 250 concurrent workers.
+960 cells x models ['lr', 'knn'], 200 reps each, jobs=250
+960 tasks
+[Parallel(n_jobs=250)]: Using backend LokyBackend with 250 concurrent workers.
+[Parallel(n_jobs=250)]: Done 148 tasks      | elapsed:  3.2min
+[Parallel(n_jobs=250)]: Done 382 tasks      | elapsed:  4.8min
+[Parallel(n_jobs=250)]: Done 654 out of 960 | elapsed:  5.8min remaining:  2.7min
+[Parallel(n_jobs=250)]: Done 847 out of 960 | elapsed:  6.4min remaining:   51.6s
+[Parallel(n_jobs=250)]: Done 960 out of 960 | elapsed:  6.7min finished
+done in 404s

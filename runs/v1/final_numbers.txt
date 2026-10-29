@@ -1,0 +1,54 @@
+run_id v1 | git b80d4a349551b162a35233baaac67763aea8092c | replicates/cell 200-200 | models ['knn', 'lr', 'rf']
+
+(T) tests 1-2 scope: cells with |z| >= 3 (gate <= 1%)
+  test 1 ICC=0    knn  0/240 = 0.00%; |opt|>=0.01 in 1
+  test 1 ICC=0    lr   1/240 = 0.42%; |opt|>=0.01 in 1
+model scenario  n   p  icc  true_auc  optimism_mean  optimism_mcse         z
+   lr S1_r2_d0 50 180  0.0      0.65      -0.005113       0.001642 -3.114032
+  test 1 ICC=0    rf   0/240 = 0.00%; |opt|>=0.01 in 1
+  test 2 control  knn  1/120 = 0.83%; |opt|>=0.01 in 3
+model scenario  n  p  icc  true_auc  optimism_mean  optimism_mcse         z
+  knn  control 20 20  0.9       0.8      -0.019713       0.004863 -4.053303
+  test 2 control  lr   0/120 = 0.00%; |opt|>=0.01 in 3
+  test 2 control  rf   1/120 = 0.83%; |opt|>=0.01 in 2
+model scenario   n   p  icc  true_auc  optimism_mean  optimism_mcse        z
+   rf  control 200 180  0.3      0.65       0.006382        0.00189 3.377639
+
+(a) largest row minus patient inflation, per classifier
+  v1 knn  S2_k8       n=30  p=20  ICC=0.9 AUC=0.50: +0.5104 (MC SE 0.0073)
+  v1 lr   S3          n=20  p=180 ICC=0.9 AUC=0.50: +0.5278 (MC SE 0.0140)
+  v1 rf   S2_k8       n=30  p=20  ICC=0.9 AUC=0.50: +0.5168 (MC SE 0.0089)
+
+(b) null false alarm, row split, pooled over 320 no-signal cells (grid-composition dependent)
+  v1 knn  P(AUC_a > 0.6) = 0.5609 (between-cell SE 0.0245)
+  v1 knn  P(AUC_a > 0.7) = 0.4406 (between-cell SE 0.0256)
+  v1 lr   P(AUC_a > 0.6) = 0.5458 (between-cell SE 0.0232)
+  v1 lr   P(AUC_a > 0.7) = 0.3810 (between-cell SE 0.0242)
+  v1 rf   P(AUC_a > 0.6) = 0.5889 (between-cell SE 0.0240)
+  v1 rf   P(AUC_a > 0.7) = 0.4615 (between-cell SE 0.0258)
+
+(c) inflation at ICC = 0, pooled over 240 cells
+  v1 knn  -0.00001 (MC SE 0.00013, z -0.10); per-cell max |z| 2.93
+  v1 lr   +0.00007 (MC SE 0.00015, z +0.47); per-cell max |z| 3.11
+  v1 rf   -0.00004 (MC SE 0.00017, z -0.24); per-cell max |z| 2.90
+
+(d) pooled OOF minus fold-mean AUC at ICC = 0
+  v1 knn  row     -0.00177 (SE 0.00022)
+  v1 knn  patient -0.00497 (SE 0.00038)
+  v1 lr   row     -0.00202 (SE 0.00021)
+  v1 lr   patient -0.00451 (SE 0.00032)
+  v1 rf   row     -0.00395 (SE 0.00040)
+  v1 rf   patient -0.01155 (SE 0.00085)
+
+(e) decomposition of each classifier's max-inflation cell: a - c = (a - indep) + (indep - c)
+  v1 knn  S2_k8|n30|icc0.9|p20|auc0.50: a 1.000  c 0.490  indep 0.500 | inflation +0.5104 (0.0073) = leakage +0.4996 (0.0009) + honest-split bias +0.0108 (0.0073)
+  v1 lr   S3|n20|icc0.9|p180|auc0.50: a 0.995  c 0.468  indep 0.499 | inflation +0.5278 (0.0140) = leakage +0.4967 (0.0010) + honest-split bias +0.0310 (0.0141)
+  v1 rf   S2_k8|n30|icc0.9|p20|auc0.50: a 0.999  c 0.482  indep 0.499 | inflation +0.5168 (0.0089) = leakage +0.4999 (0.0009) + honest-split bias +0.0169 (0.0090)
+
+(f) test 3 (80%-trained comparator): max |gap| per classifier
+  v1 knn  max |gap| 0.0040 (limit 0.02)
+  v1 lr   max |gap| 0.0057 (limit 0.02)
+  v1 rf   max |gap| 0.0056 (limit 0.02)
+
+(g) runtime, core-hours by classifier
+  knn 7.5, lr 21.6, rf 1268.4
