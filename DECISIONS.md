@@ -1,106 +1,111 @@
-# Decisions log — mie27-unit-leakage
+# Decisions
 
-Each entry: what the spec said, what was done, why. Items marked **NEEDS SIGN-OFF**
-change what a reader of the paper would assume; please confirm or overrule.
+What the spec said, what was done, why. Dates are 2026.
 
-## D1. S1 nested variance when ICC_p + ICC_e > 1 — ACCEPTED 28 Oct
-Spec: patient ICC_p and eye ICC_e, default ICC_e = ICC_p / 2. Taken as shares of
-total variance, ICC_p = 0.9 gives 0.9 + 0.45 = 1.35 > 1 (impossible).
-Done: ICC_e is the eye's share of the *within-patient* variance:
-s2_eye = ICC_e (1 − ICC_p), s2_res = (1 − ICC_p)(1 − ICC_e). Valid on the whole grid.
-Consequence: corr(fellow eyes) = ICC_p; corr(repeats of one eye) = ICC_p + s2_eye.
+## D1. S1 variance nesting (accepted 28 Oct)
+Spec: patient ICC_p and eye ICC_e, default ICC_e = ICC_p/2. As shares of total
+variance these exceed 1 at ICC_p = 0.9. ICC_e is therefore the eye share of the
+within-patient variance: s2_eye = ICC_e(1 - ICC_p), s2_res = (1 - ICC_p)(1 - ICC_e).
+Fellow eyes correlate at ICC_p, repeats of one eye at ICC_p + s2_eye. Components
+are asserted to sum to 1 in code and in test 3b.
 
-## D2. Meaning of "true AUC" and beta calibration
-Done: true AUC = AUC of the oracle score w'x on an independent k = 1 sample.
-Since every feature has total variance 1, w'x | y ~ N(beta·y, 1) and
-AUC = Φ(beta/√2), so beta = √2 Φ⁻¹(AUC) for **every p and every ICC**.
-beta(0.65) = 0.5449, beta(0.80) = 1.1902. "Per p" calibration was still run by
-Monte Carlo bisection and stored (calibration.csv); it reproduces the analytic
-value, which documents that p does not enter. Test 5 passes for both p.
+## D2. True AUC
+True AUC is the oracle AUC of w'x on an independent k = 1 sample. Since every
+feature has unit variance, AUC = Phi(beta/sqrt 2) and beta = sqrt(2) Phi^-1(AUC)
+for every p and ICC: 0, 0.5449, 1.1902. Monte Carlo calibration per p reproduces
+this (calibration.csv); the per-p split in the spec has no effect.
 
-## D3. Test 3 — ACCEPTED 28 Oct: compare each split with the model's own independent-test AUC
-Test 3 asks every split to hit 0.80 ± 0.02 at n = 200, ICC = 0. 0.80 is the
-*oracle* AUC (D2). Models trained on 160 rows with 20 or 180 features land well
-below it (the learned AUC is below it; see auc_indep_mean in results.csv),
-independent of any leakage. Done: each replicate also fits the model on all rows and scores an independent k = 1 sample of 2000 patients (auc_indep); test 3 requires |AUC(split) - auc_indep| <= 0.02 at true AUC 0.80, n = 200, ICC = 0, for every split, model, scenario and p.
+## D3. Test 3 (accepted 29 Oct)
+Spec: at n = 200, ICC = 0, true AUC 0.80, every split within 0.80 +/- 0.02.
+0.80 is the oracle AUC; learned models sit below it regardless of leakage, so
+the test cannot pass as written. First fix compared splits with a model trained
+on all patients; on v1 this failed in 4 LR p = 180 rows by -0.020 on every split,
+a learning-curve effect (CV trains on 80% of patients). Final version: comparator
+is the same model trained on a stratified random 80% of patients, scored on
+2000 independent patients (scripts/test3_comparator.py). Each replicate is
+regenerated from its seed and must reproduce the stored full-data AUC exactly
+before the comparator is accepted. Tolerance stays 0.02. Result: max gap 0.0057.
 
-## D4. CV AUC estimator: fold-mean (primary), pooled OOF (sensitivity) — ACCEPTED 28 Oct
-Pooled out-of-fold AUC is biased *below* 0.5 under the null when fold class
-balance varies, and patient-grouped folds vary more (labels cluster in patients).
-At ICC = 0, n = 20 this produced spurious "optimism" of +0.013 to +0.019 in
-S2_k8 / S3 (≈3 Monte Carlo SE) that is not leakage. Mean of per-fold AUCs removed
-it (≈0.000 ± 0.005). Folds with a single class in the test set are skipped and
-counted (skipped_folds_mean; ~0.05 per replicate at n = 20, 0 by n = 50).
-results.csv keeps both: auc_mean / optimism_mean / false_alarm_070 are fold-mean;
-*_pooled columns are pooled OOF.
+## D4. CV AUC estimator (accepted 28 Oct)
+Pooled out-of-fold AUC is biased below 0.5 under the null when fold class
+balance varies, and patient-grouped folds vary more. At ICC = 0, n = 20 this
+produced spurious optimism of +0.013 to +0.019 in S2/S3. Mean of per-fold AUCs
+removed it. Fold-mean is primary; pooled is kept as *_pooled. On v1 the pooled
+estimator would have added +0.003 (LR, kNN) and +0.008 (RF) at ICC = 0.
+Test folds with one class are skipped and counted.
 
-## D5. Degenerate replicates
-Patient labels are redrawn if either class has < 2 patients (otherwise CV AUC is
-undefined). Probability ≈ 4e-5 at n = 20; count stored (redraws_total).
+## D5. Degenerate draws
+Patient labels are redrawn if either class has fewer than 2 patients
+(probability ~4e-5 at n = 20). Count stored as redraws_total.
 
 ## D6. Calculator scope
-Fitted on control, S1_r1_d0, S2_k4, S2_k8, S3 (patient → rows). S1_r1_d0 is
-included because one row per eye with concordant labels is identical in
-distribution to a k = 2 patient cluster. Other S1 variants are excluded: with
-r = 2 the eye level adds a second clustering layer, and with d = 0.2 labels
-differ within a patient, so neither is a function of k_mean.
-Signature optimism(n, k_mean, icc, p, model) plus keyword true_auc (default 0.65,
-grid midpoint), because optimism depends on signal strength. p is categorical
-{20, 180}: two values cannot support interpolation. Form:
-icc·(1 − 1/k)·poly2(icc, ln n, ln k, true_auc) — zero at ICC = 0 and k = 1 by
-construction.
+Fitted per classifier x p on control, S1_r1_d0, S2_k4, S2_k8, S3: 300 cells each.
+S1_r1_d0 is included because one row per eye with concordant labels is the same
+as a k = 2 patient cluster. Other S1 variants are not a function of k_mean (eye
+level adds a second clustering layer; d = 0.2 puts different labels in one
+patient). Form: icc (1 - 1/k) poly2(icc, ln n, ln k, true_auc), zero at ICC = 0
+and k = 1 by construction. Degree 3 was tried and was worse by leave-one-out.
+true_auc is a keyword with default 0.65. p is categorical {20, 180}.
+Held-out error on v1: RMSE 0.013-0.023, max 0.04-0.08, against MC SE ~0.003,
+so the misfit is systematic. Report the calculator as accurate to about 0.02.
 
-## D7. Test 0 added: replication
-Tests 1–3 check MC means against ±0.01. At fewer than 200 replicates they are
-noise-limited, so test 0 fails any run below 200 replicates/cell and the figure
-gate requires all tests to pass. Note even at 200 reps the MC SE of optimism at
-n = 20 is ≈ 0.004–0.007, so test 1's ±0.01 spans only ~1.5–2.5 SE across 240+
-cells. ACCEPTED 28 Oct: gate is |z| < 3 per cell (z = optimism / MC SE) with at most 1% of cells failing; |optimism| < 0.01 is kept as the reported column optimism_within_001. The same gate is applied to test 2 (same noise argument; absolute column still reported).
+## D7. Test gates (accepted 29 Oct)
+Tests 1 and 2 gate on |z| < 3 per cell (z = optimism / MC SE) with at most 1% of
+cells failing; |optimism| < 0.01 is reported as a column, not gated. Test 0
+requires 200 replicates per cell. On v1: test 1 failing cells 1/240 (LR), 0, 0;
+test 2 1/120 (kNN), 0 (LR), 1/120 (RF). The kNN control cell (n 20, p 20,
+ICC 0.9, AUC 0.8, z -4.05) was rerun for 200 more replicates (v1-ctrl-ext):
+-0.0048 +/- 0.0049, z -0.98, combined z -3.54. Under the rule set before the
+rerun this is inconclusive. The other 23 n = 20 control cells pooled give
++0.0019 +/- 0.0010 (kNN) and +0.0015 +/- 0.0012 (LR), so there is no systematic
+splitter effect; the original cell is selection plus chance. The flagged RF
+control cell (n 200, p 180, ICC 0.3, z +3.38) was not followed up.
 
-## D8. Figure choices
-fig1: true AUC 0.65 (option --true-auc), S1 panel = r = 2, d = 0; error bars are
-95% Monte Carlo intervals of the mean. fig2: split (a), p = 180, all 8 scenarios,
-colour = ICC, line style = model.
+## D8. Figures
+Figure 1: true AUC 0.65 (flag --true-auc), S1 panel is r = 2, d = 0, bars are
+95% MC intervals. Figure 2: split (a), colour = ICC, line style = classifier,
+grey = patient split. Manuscript versions come from scripts/figures_v2.py;
+mie27.figures output is superseded.
 
-## D9. LR max_iter = 1000
-sklearn defaults otherwise (L2, C = 1, lbfgs). Default max_iter = 100 does not
-always converge at p = 180; raising it changes convergence, not the estimator.
+## D9. LR max_iter
+1000 instead of the sklearn default 100 so lbfgs converges at p = 180. Other
+settings are defaults.
 
-## D10. Random forest — superseded 28 Oct: no Gadi; RF runs as a separate local run (v1-rf)
-RF was not run in the build environment (1 CPU core). Measured RF cost here:
-10–65 s per replicate at n = 200 (all splits), rough grid total ≈ 900 core-hours
-(uncertain by ~2×), ≈ 1,800 SU on Gadi `normal`. The slowest cell
-(S2_k8, n = 200, p = 180) is ~3.6 h on one core, which bounds wall time.
-Rule: if RF is not complete by 29 Oct 18:00 AEDT, summarise with
-`--models lr knn` and record the decision here with the completed-cell count.
-Decision: _not yet taken._
+## D10. Compute
+Gadi was dropped; everything ran on one 250-core node via jobs/launch_local.sh.
+RF cells are split into replicate chunks; chunked output is bit-identical to
+unchunked. Cost: RF 1268 core-hours, LR 21.6, kNN 7.5.
 
-## D11. Variance-component assertion (28 Oct)
-simulate() asserts patient + eye + residual = 1 on every call; test_3b checks it
-over all scenarios x ICC on the grid.
+## D11. Bugs fixed during v1
+A leftover sandbox path in requirements.lock (fix lock file commit). Worker
+pickling failed under `python -m` with more than one worker (fix multi-worker
+entry point, b80d4a3); no cells were written by the failed attempts. nproc
+honoured OMP_NUM_THREADS=1 and reported one core; fixed in the launcher.
 
-## D12. Execution (28 Oct)
-Target is one 250-core node; jobs/launch_local.sh replaces the Gadi PBS scripts.
-Measured at the largest cell (S2 k = 8, n = 200, p = 180, ICC 0.9, AUC 0.80),
-one worker, peak RSS incl. the independent-test fit: LR 175 MB, kNN 210 MB,
-RF 176 MB; time per replicate LR 1.2 s, kNN 0.5 s, RF 130 s. RF cells are split
-into replicate chunks (--chunks) so no single task runs for hours; chunked
-output is bit-identical to unchunked (verified).
+## D12. S1 kNN non-monotone in ICC
+At p = 180 kNN optimism in S1 is near its maximum by ICC 0.3 and falls by up to
+0.028 from 0.6 to 0.9. A separate diagnostic (not v1) shows the patient's own
+rows already fill the neighbour list; at high ICC the remaining slots fill with
+rows of one other patient, whose shared label adds noise. At p = 20 it is graded.
 
-## D13. Calculator surface (28 Oct)
-Degree-2 vs degree-3 compared by leave-one-out on a 10-replicate scratch run:
-degree 3 is worse (LOO RMSE 0.018→0.018 kNN, 0.028→0.029 LR, max error up), so
-degree 2 stays. Held-out (20% of cells) RMSE and max |error| are written to
-calculator_validation.csv on every build; judge the surface on the 200-rep run.
-A 10-replicate partial run from before the code freeze is kept only as
-runs/stale-v1-10rep-DO-NOT-USE and feeds nothing downstream.
+## D13. Real-data check (realdemo-v1, 29 Oct)
+PhysioNet/CinC 2019 set A, CC BY 4.0 (DATA.md). Design as specified by the
+orchestrator; pipeline reuses mie27.cv.make_folds. Choices: imputation medians
+fitted on the training fold; kNN standardised (v1 features already had unit
+variance); ICC fed to the calculator is computed on the imputed matrix the
+models see (0.25), not observed values only (0.70), since the latter would
+predict optimism the models cannot realise on 80%-imputed features.
+Result: observed optimism 0.03-0.26, all positive; calculator within its
+stated error for LR (+0.02) and kNN (-0.05 to +0.01), under-predicts RF by
+0.07-0.10. Trends with k and n match. Assumption violations are listed in
+runs/realdemo-v1/limitations.md.
 
-## D3b. Test-3 comparator trained on 80% of patients (approved 29 Oct)
-On run v1 (git b80d4a3), test 3 failed in 4 LR p = 180 rows by −0.0202 to −0.0204
-on every split, including the row split: CV models train on 80% of patients while
-auc_indep was trained on 100%, so the comparator was biased high by the learning
-curve. Comparator now = independent-test AUC of the same model trained on a
-stratified random 80% of patients, from a fresh SeedSequence child of each
-replicate (scripts/test3_comparator.py). Each replicate is regenerated from its
-seed and must reproduce the stored full-data auc_indep (|diff| < 1e-9) before the
-comparator is accepted. Tolerance unchanged (±0.02).
+## D14. Second real-data check not done (30 Oct)
+Requested: repeat realdemo-v1 unchanged on the MIMIC-IV demo (100 patients,
+ODbL) or the eICU demo. Neither has the input the pipeline takes: one file per
+patient with hourly rows of the CinC 2019 variables and a SepsisLabel. Both
+would need a new extraction (hourly binning of chart or vital tables, mapping
+of 20 variables, a sepsis label from diagnoses) before the pipeline could run.
+That is a new design, not a repeat, and could not be pre-specified and run
+cleanly by the 1 Nov cut-off. No realdemo-v2 result exists and none goes in
+the paper.

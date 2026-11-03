@@ -1,0 +1,67 @@
+{
+ "run_id": "realdemo-v1",
+ "git_hash": "14a6c0eb1acb8e540e44beda0ec274318e7327be",
+ "data": "data/training_setA",
+ "n_subsamples": 100,
+ "features": [
+  "HR",
+  "MAP",
+  "Resp",
+  "O2Sat",
+  "SBP",
+  "DBP",
+  "Temp",
+  "FiO2",
+  "pH",
+  "BaseExcess",
+  "Glucose",
+  "Hct",
+  "PaCO2",
+  "Potassium",
+  "Hgb",
+  "BUN",
+  "Chloride",
+  "HCO3",
+  "WBC",
+  "Platelets"
+ ],
+ "cohorts": {
+  "4": {
+   "k": 4,
+   "n_patients_total": 20336,
+   "n_eligible": 20336,
+   "frac_excluded": 0.0,
+   "n_eligible_sepsis": 1790,
+   "n_eligible_nonsepsis": 18546
+  },
+  "8": {
+   "k": 8,
+   "n_patients_total": 20336,
+   "n_eligible": 20336,
+   "frac_excluded": 0.0,
+   "n_eligible_sepsis": 1790,
+   "n_eligible_nonsepsis": 18546
+  }
+ },
+ "icc_summary": [
+  {
+   "k": 4,
+   "icc_mean": 0.2531928578624413,
+   "icc_median": 0.15433019560397804,
+   "icc_q25": 0.10480178611428069,
+   "icc_q75": 0.3833372331206533,
+   "icc_obs_mean": 0.7260180746688565,
+   "icc_obs_median": 0.6988100452834687
+  },
+  {
+   "k": 8,
+   "icc_mean": 0.2607651354784892,
+   "icc_median": 0.14993750239794154,
+   "icc_q25": 0.10670504495227169,
+   "icc_q75": 0.4034170908292782,
+   "icc_obs_mean": 0.6919874274618519,
+   "icc_obs_median": 0.6412459773930727
+  }
+ ],
+ "skipped_k": []
+}
