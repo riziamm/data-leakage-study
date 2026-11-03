@@ -41,10 +41,8 @@ delta_auc = optimism(
 print(f"Predicted Optimism: +{delta_auc:.3f} AUC")
 
 ```
-### Constraints: Strictly bound to the experimental parameter grid; raises ValueError
-on out-of-distribution inputs.
-### Accuracy: Held-out RMSE across the parameter grid is $0.013\text{--}0.023$ 
-AUC (worst single-cell error: $0.080$; see runs/v1/calculator_report.txt).
+### Constraints: Strictly bound to the experimental parameter grid; raises ValueError on out-of-distribution inputs.
+### Accuracy: Held-out RMSE across the parameter grid is $0.013\text{--}0.023$ AUC (worst single-cell error: $0.080$; see runs/v1/calculator_report.txt).
 
 ## Layout
 
@@ -107,15 +105,6 @@ and all classifiers see the same data and folds. Runs are resumable.
 | Figure S2 (p = 180 null) | figures/figS2_null_p180_v1 | v1 | b80d4a3 |
 | Figure S3 (CinC 2019) | figures/figS3_obs_vs_pred_realdemo-v1 | realdemo-v1 | see supplement/figure_provenance.json |
 
-## Calculator
-
-    import sys; sys.path.insert(0, "runs/v1")
-    from calculator import optimism
-    optimism(n=100, k_mean=4, icc=0.6, p=180, model="knn", true_auc=0.65)
-
-Returns the expected row-level minus patient-level CV AUC. Refuses inputs
-outside the simulated grid. Held-out RMSE 0.013-0.023, worst cell 0.08
-(runs/v1/calculator_report.txt).
 
 ## results.csv
 
