@@ -1,41 +1,121 @@
-# data-leakage-study
+# Sample-Unit Leakage in Clinical ML
 
-Code, results and calculator for "Many Rows, Few Patients: A Simulation and
-Nomogram for Sample-Unit Leakage in Clinical Machine Learning" (MIE 2027).
-Simulation data are synthetic. The real-data check uses a public dataset that
-is not redistributed here (DATA.md). MIT licence.
+Clinical datasets often hold several rows per patient (two eyes, serial scans,
+repeated encounters). Splitting those rows at random for cross-validation lets
+the model recognise the patient and inflates the AUC. This repository gives a
+calculator for the expected inflation, the nomogram it was read from, and a
+three-item reporting field. It accompanies our MIE 2027 paper. The 
+supplementary figures the paper cites are in supplement/supplement.pdf. 
+MIT licence.
 
-Simulation code: tag v1-sim, commit b80d4a3. Submitted state: tag
-mie2027-submission. Python 3.11 (3.11.15 at pinning, 3.11.18 on the run node),
-scikit-learn 1.9.1, numpy 2.4.6, pandas 3.1.0, scipy 1.17.1, matplotlib
-3.11.2, joblib 1.6.0; pins in requirements.lock.
+## Cite
 
-Compute: run v1 used 1268 core-hours for RF, 21.6 for LR and 7.5 for kNN on
-ANU School of Computing, Neuroinformatics, one 250-core CPU node. The real-data check took 3 minutes on
-32 cores.
+Rizia MM, Maddess T, Suominen H. Many Rows, Few Patients: A Simulation and
+Nomogram for Sample-Unit Leakage in Clinical Machine Learning. MIE 2027, Stud
+Health Technol Inform, submitted.
 
-## Layout
+The real-data check uses Reyna MA et al. Early prediction of sepsis from
+clinical data: the PhysioNet/Computing in Cardiology Challenge 2019. Crit Care
+Med 2020;48(2):210-7, doi:10.1097/CCM.0000000000004145. 
+Data: PhysioNet/CinC 2019 v1.0.0, doi:10.13026/v64v-d857, CC BY 4.0; 
+no redistribution (see DATA.md).
 
-    src/mie27/         generate, calibrate, cv, run, summarise, build_calculator,
-                       figures, fast (kNN and grouped-fold replicas, tested
-                       identical to scikit-learn)
-    scripts/           test3_comparator.py, figures_v2.py, realdemo.py,
-                       make_supplement.py
-    jobs/              launch_local.sh
-    tests/             acceptance tests 0-5
-    runs/v1/           results.csv, calibration.csv, test_output.txt,
-                       test3_comparator80.csv, calculator.py,
-                       calculator_report.txt, final_numbers.txt,
-                       figs_v2/fig2_values_lr_knn_rf_v1.csv
-    runs/realdemo-v1/  table, per-feature ICC and missingness, limitations.md
-    figures/           Figures 1-2 and S1-S3, PNG and PDF, named by run_id
-    supplement/        supplement.pdf (Figures S1-S3 with captions)
-    DECISIONS.md       deviations from the protocol and why
-    DATA.md            external dataset, licence, what is stored
+Numbers from the paper: runs/v1/results.csv or runs/realdemo-v1/table_realdemo-v1.csv.
+
+## Calculator
+
+Python 3, no dependencies.
+
+    git clone https://github.com/riziamm/data-leakage-study.git
+    cd data-leakage-study
+    python -c "import sys; sys.path.insert(0, 'runs/v1'); from calculator import optimism; \
+      print(optimism(n=50, k_mean=5, icc=0.3, p=20, model='lr', true_auc=0.65))"   # 0.120
+
+| input | meaning | range |
+|---|---|---|
+| n | patients | 20-200 |
+| k_mean | mean rows per patient | 1-8 |
+| icc | within-patient one-way ICC of the features, mean over features | 0-0.9 |
+| p | number of features | 20 or 180 only |
+| model | "lr", "knn", "rf" | |
+| true_auc | patient-level AUC; default 0.65 | 0.5-0.8 |
+
+Output: expected row-level minus patient-level cross-validated AUC. Subtract
+it from a row-level AUC to estimate what a patient-level split would have
+given. Outside the ranges it raises ValueError rather than extrapolate.
+
+Accuracy: held-out RMSE 0.013-0.023, maximum error 0.041-0.082 (worst RF,
+p = 180); see runs/v1/calculator_report.txt. On the sepsis data, with the
+pre-specified mean ICC (0.25), it matched LR within +0.017 to +0.026 and kNN
+within -0.047 to +0.010, and under-predicted RF by 0.070-0.100. A corrected
+value inherits the ICC's uncertainty and this error. The remedy for a leaky
+estimate is a patient-level split, not a correction.
+
+CinC 2019, one row of the check (LR, k = 4, n = 100):
+
+    import sys, pandas as pd; sys.path.insert(0, "runs/v1")
+    from calculator import optimism
+    t = pd.read_csv("runs/realdemo-v1/table_realdemo-v1.csv")
+    r = t[(t.model == "lr") & (t.k == 4) & (t.n == 100)].iloc[0]
+    print(r.optimism_observed, r.optimism_se)  # 0.055  0.002
+    print(optimism(100, 4, r.icc_mean, 20, "lr", true_auc=r.true_auc_used))  # 0.076
+
+Worked example from the paper: a 5-fold AUC of 0.71 from LR on encounter rows,
+50 patients, five rows per patient, split by row, ICC about 0.3. The matching
+simulation cell (S3, n = 50, ICC 0.3, p = 20, Figure 1) gives optimism +0.154,
+so a patient-level split would have returned about 0.56. The calculator gives
++0.120 for the same inputs; the 0.034 gap is above its RMSE but inside its
+maximum error. Read the figure where a cell exists; use the calculator between
+cells.
+
+## Nomogram
+
+<img src="figures/fig1_nomogram_p20_v1.png" width="640">
+
+figures/fig1_nomogram_p20_v1.png (p = 20) and figures/figS1_nomogram_p180_v1.png
+(p = 180). Pick the column for the data structure and the row for the
+classifier, find the ICC on the x-axis, and read optimism off the line for the
+nearest number of patients. Bars are 95% Monte Carlo intervals.
+figures/fig2_null_p20_v1.png shows how often a model with no real signal still
+reaches AUC 0.70 under a row-level split; grey is the patient-level split.
+
+## Reporting field
+
+Three items for any model report: (1) unit of independence, the entity whose
+rows share no information across the train/test boundary; (2) rows per unit,
+median and maximum; (3) grouping key, the identifier used to assign whole units
+to folds, or "none" if rows were split individually.
+
+| item | paper worked example | CinC 2019 check |
+|---|---|---|
+| unit of independence | patient | patient |
+| rows per unit | median 4, maximum not stated | 4 or 8 by design, from hourly records |
+| grouping key | none | patient file id |
+
+To estimate ICC on your own data, fit a one-way random-effects model per
+feature with patient as the grouping factor and take the mean.
+scripts/realdemo.py has icc_balanced (equal rows per patient, as in the check)
+and icc_unbalanced.
+
+## Figures
+
+| paper | file | run_id | code |
+|---|---|---|---|
+| Figure 1 | figures/fig1_nomogram_p20_v1 | v1 | b80d4a3 |
+| Figure 2 | figures/fig2_null_p20_v1 | v1 | b80d4a3 |
+| Figure S1, p = 180 nomogram | figures/figS1_nomogram_p180_v1 | v1 | b80d4a3 |
+| Figure S2, p = 180 null | figures/figS2_null_p180_v1 | v1 | b80d4a3 |
+| Figure S3, CinC 2019 | figures/figS3_obs_vs_pred_realdemo-v1 | realdemo-v1 | supplement/figure_provenance.json |
 
 ## Reproduce
 
-Wall times are for one 250-core node.
+Simulation code: tag v1-sim, commit b80d4a3, tag mie2027-submission. 
+Python 3.11, scikit-learn 1.9.1; all pins in requirements.lock. 
+Simulation data are synthetic. Protocol details in DECISIONS.md.
+
+Run v1 took 1268 core-hours for RF, 21.6 for LR and 7.5 for kNN on the ANU
+School of Computing Neuroinformatics cluster, one 250-core CPU node; the
+real-data check 3 minutes on 32 cores. Wall times below are for that node.
 
     # 1. environment, 2 min
     uv venv -p 3.11 .venv && . .venv/bin/activate
@@ -62,37 +142,10 @@ Wall times are for one 250-core node.
     python scripts/realdemo.py --data data/training_setA --jobs 32
     python scripts/make_supplement.py
 
-Every cell's seed is a hash of (base seed 20271, cell id), so any machine or
-shard gives the same numbers and all classifiers see the same data and folds.
-Interrupted runs resume.
+Every cell's seed is a hash of (base seed 20271, cell id) and all classifiers
+see the same data and folds for reproducibility.
 
-## Figures
-
-| paper | file | run_id | code |
-|---|---|---|---|
-| Figure 1 | figures/fig1_nomogram_p20_v1 | v1 | b80d4a3 |
-| Figure 2 | figures/fig2_null_p20_v1 | v1 | b80d4a3 |
-| Figure S1 (p = 180 nomogram) | figures/figS1_nomogram_p180_v1 | v1 | b80d4a3 |
-| Figure S2 (p = 180 null) | figures/figS2_null_p180_v1 | v1 | b80d4a3 |
-| Figure S3 (CinC 2019) | figures/figS3_obs_vs_pred_realdemo-v1 | realdemo-v1 | see supplement/figure_provenance.json |
-
-The supplement the paper cites is supplement/supplement.pdf.
-
-## Calculator
-
-    import sys; sys.path.insert(0, "runs/v1")
-    from calculator import optimism
-    optimism(n=100, k_mean=4, icc=0.6, p=180, model="knn", true_auc=0.65)
-
-Returns the expected row-level minus patient-level CV AUC. Refuses inputs
-outside the simulated grid. Held-out RMSE 0.013-0.023, worst cell 0.08
-(runs/v1/calculator_report.txt).
-
-## results.csv
-
-One row per cell x classifier x split (a_row, b_unit, c_patient). auc_mean and
-quantiles are fold-mean CV AUC over 200 replicates. optimism_mean is this split
-minus c_patient. false_alarm_070 is P(AUC > 0.70) in true-AUC-0.50 cells.
-*_pooled columns use pooled out-of-fold AUC (sensitivity analysis).
-auc_indep_mean is the AUC of a model trained on all rows and scored on 2000
-independent patients.
+Layout: src/mie27 (generate, calibrate, cv, run, summarise, build_calculator,
+figures, fast), scripts (test3_comparator, figures_v2, realdemo,
+make_supplement), jobs/launch_local.sh, tests (acceptance tests 0-5), runs/v1,
+runs/realdemo-v1, figures, supplement, DATA.md, DECISIONS.md.
