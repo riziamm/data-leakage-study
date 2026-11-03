@@ -1,0 +1,1 @@
+v1 lr S3|n20|icc0.9|p180|auc0.50 patient-split fold-mean AUC: P(>0.70) = 0.135; 2.5/97.5% = 0.109/0.831; n = 200

@@ -99,3 +99,13 @@ Result: observed optimism 0.03-0.26, all positive; calculator within its
 stated error for LR (+0.02) and kNN (-0.05 to +0.01), under-predicts RF by
 0.07-0.10. Trends with k and n match. Assumption violations are listed in
 runs/realdemo-v1/limitations.md.
+
+## D14. Second real-data check not done (30 Oct)
+Requested: repeat realdemo-v1 unchanged on the MIMIC-IV demo (100 patients,
+ODbL) or the eICU demo. Neither has the input the pipeline takes: one file per
+patient with hourly rows of the CinC 2019 variables and a SepsisLabel. Both
+would need a new extraction (hourly binning of chart or vital tables, mapping
+of 20 variables, a sepsis label from diagnoses) before the pipeline could run.
+That is a new design, not a repeat, and could not be pre-specified and run
+cleanly by the 1 Nov cut-off. No realdemo-v2 result exists and none goes in
+the paper.

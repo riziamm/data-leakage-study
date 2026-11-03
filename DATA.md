@@ -5,7 +5,7 @@ check of the calculator (run realdemo-v1).
 
 ## Source
 
-PhysioNet/CinC Challenge 2019, v1.0.0, training set A. 20,336 ICU patients,
+PhysioNet/CinC Challenge 2019, version 1.0.0, training set A. 20,336 ICU patients,
 one PSV file per patient, one row per hour, 40 variables plus SepsisLabel.
 
 - https://physionet.org/content/challenge-2019/1.0.0/
@@ -15,7 +15,8 @@ one PSV file per patient, one row per hour, 40 variables plus SepsisLabel.
 
 ## Licence
 
-CC BY 4.0. Project page: "Anyone can access the files, as long as they conform
+Creative Commons Attribution 4.0 International (CC BY 4.0): free to share and
+adapt for any purpose, with attribution and a link to the licence. Project page: "Anyone can access the files, as long as they conform
 to the terms of the specified license." No registration, agreement or fee.
 Research use and redistribution are allowed with attribution. Checked
 2026-10-29. A copy of LICENSE.txt is kept in runs/realdemo-v1/.
@@ -29,7 +30,7 @@ Cite in the paper:
 
 ## What is in the repo
 
-Raw files are not committed (`data/` is ignored). `runs/realdemo-v1/` holds
+No data files are redistributed in this repository; `data/` is ignored. `runs/realdemo-v1/` holds
 derived summaries only: per-feature missingness, skewness, ICC, per-subsample
 AUCs, the observed-vs-predicted table and figure.
 
